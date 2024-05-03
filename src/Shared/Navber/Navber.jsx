@@ -1,6 +1,6 @@
 
 import { useContext } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { AuthContext } from '../../Firebase/AuthProvider';
 
 const Navber = () => {
@@ -19,7 +19,10 @@ const Navber = () => {
 
         <NavLink to="/register"><li>Register</li></NavLink>
         {
-            user?.email ? <li><button onClick={handleLogOut}>Logout</button></li>
+            user?.email ? <>
+                <li><Link to="/bookings">MY Bookings</Link></li>
+                <li><button onClick={handleLogOut}>Logout</button></li>
+            </>
                 :
                 <NavLink to="/login"><li>Login</li></NavLink>
         }
