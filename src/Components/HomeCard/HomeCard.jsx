@@ -19,7 +19,7 @@ const HomeCard = () => {
                 services.map(service => <div key={service._id} className="card card-compact  bg-base-100 shadow-xl">
                     <figure><img src={service.img} alt="Shoes" /></figure>
                     <div className="card-body">
-                        <h2 className="card-title">Shoes!</h2>
+                        <h2 className="card-title">{service.title}</h2>
                         <p>If a dog chews shoes whose shoes does he choose?</p>
                         <div className="card-actions justify-end">
                             <Link to={`/checkout/${service._id}`}>

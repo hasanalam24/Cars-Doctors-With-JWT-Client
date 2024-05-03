@@ -1,15 +1,33 @@
 
+import { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
+import { AuthContext } from '../../Firebase/AuthProvider';
 
 const Navber = () => {
+
+    const { user, logOut } = useContext(AuthContext)
+
+    const handleLogOut = () => {
+        logOut()
+            .then(() => { })
+            .catch(error => console.log(error))
+    }
 
     const navbarLinks = <>
 
         <NavLink to="/"><li>Home</li></NavLink>
-        <NavLink to="/login"><li>Login</li></NavLink>
+
         <NavLink to="/register"><li>Register</li></NavLink>
+        {
+            user?.email ? <li><button onClick={handleLogOut}>Logout</button></li>
+                :
+                <NavLink to="/login"><li>Login</li></NavLink>
+        }
+
 
     </>
+
+
     return (
         <div className="navbar bg-base-100">
             <div className="navbar-start">
