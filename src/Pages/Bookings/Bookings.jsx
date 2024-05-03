@@ -7,8 +7,6 @@ const Bookings = () => {
     const { user } = useContext(AuthContext)
     console.log(user.email)
     const [bookings, setBookings] = useState([])
-    const { customerName, email, date, service, price, img } = bookings
-    console.log(bookings)
 
     const url = `http://localhost:5000/bookings?email=${user?.email}`
 
@@ -21,6 +19,24 @@ const Bookings = () => {
             })
     }, [])
 
+    const handleDelete = id => {
+        const procced = confirm('Are You Sure you want to Delete?')
+        if (procced) {
+            fetch(`http://localhost:5000/bookings/${id}`, {
+                method: "DELETE"
+            })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(data)
+                    if (data.deletedCount > 0) {
+                        alert('deleted SuccessFully')
+                        const remaining = bookings.filter(booking => booking._id !== id)
+                        setBookings(remaining)
+                    }
+                })
+        }
+    }
+
     return (
         <div>
             <h1>this is bookings: {bookings.length}</h1>
@@ -30,9 +46,9 @@ const Bookings = () => {
                     <thead>
                         <tr>
                             <th>
-                                <label>
+                                {/* <label>
                                     <input type="checkbox" className="checkbox" />
-                                </label>
+                                </label> */}
                             </th>
                             <th>Name</th>
                             <th>Email</th>
@@ -48,9 +64,9 @@ const Bookings = () => {
 
                                 <tr key={booking._id}>
                                     <th>
-                                        <label>
-                                            <input type="checkbox" className="checkbox" />
-                                        </label>
+                                        <button onClick={() => handleDelete(booking._id)} className="btn btn-sm btn-circle">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                                        </button>
                                     </th>
                                     <td>
                                         <div className="flex items-center gap-3">
