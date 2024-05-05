@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Firebase/AuthProvider";
+import { update } from "firebase/database";
 
 
 const Bookings = () => {
@@ -17,7 +18,7 @@ const Bookings = () => {
             .then(data => {
                 setBookings(data)
             })
-    }, [])
+    }, [url])
 
     const handleDelete = id => {
         const procced = confirm('Are You Sure you want to Delete?')
@@ -35,6 +36,29 @@ const Bookings = () => {
                     }
                 })
         }
+    }
+
+    const handleConfirm = (id) => {
+        fetch(`http://localhost:5000/bookings/${id}`, {
+            method: "PATCH",
+            headers: {
+                'content-type': "application/json"
+            },
+            body: JSON.stringify({ status: 'confirm' })
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log(data)
+                if (data.modifiedCount > 0) {
+                    // update state
+                    const remaining = bookings.filter(booking => booking._id !== id)
+                    const updated = bookings.find(booking => booking._id === id)
+                    updated.status = 'confirm'
+                    const newBook = [updated, ...remaining]
+                    setBookings(newBook)
+
+                }
+            })
     }
 
     return (
@@ -87,7 +111,10 @@ const Bookings = () => {
                                     <td>${booking.date}</td>
 
                                     <th>
-                                        <button className="btn btn-ghost btn-xs">details</button>
+                                        {
+                                            booking.status === 'confirm' ? <span className="text-2xl text-primary font-bold">Confirmed</span> :
+                                                <button onClick={() => handleConfirm(booking._id)} className="btn btn-ghost btn-xs">Confirm</button>
+                                        }
                                     </th>
                                 </tr>
 

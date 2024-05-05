@@ -20,7 +20,7 @@ const Navber = () => {
         <NavLink to="/register"><li>Register</li></NavLink>
         {
             user?.email ? <>
-                <li><Link to="/bookings">MY Bookings</Link></li>
+                <li><Link to="/bookings">My Bookings</Link></li>
                 <li><button onClick={handleLogOut}>Logout</button></li>
             </>
                 :
