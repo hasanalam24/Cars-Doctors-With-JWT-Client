@@ -1,11 +1,13 @@
-import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { AuthContext } from "../../Firebase/AuthProvider";
+// import { useContext } from "react";
+// import { AuthContext } from "../../Firebase/AuthProvider";
+import UseAuthHooks from "../../Hooks/UseAuthHooks";
 
 
 const Login = () => {
 
-    const { signInUser, user } = useContext(AuthContext)
+    // const { signInUser, user } = useContext(AuthContext)
+    const { signInUser, user } = UseAuthHooks()
 
     const handleLogin = e => {
         e.preventDefault()
