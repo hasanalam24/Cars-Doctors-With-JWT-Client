@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import app from "./firebase.config";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { set } from "firebase/database";
+import axios from "axios";
 const auth = getAuth(app);
 
 
@@ -33,6 +34,14 @@ const AuthProvider = ({ children }) => {
         const unSubcribe = onAuthStateChanged(auth, currentUser => {
             setLoading(false)
             setUser(currentUser)
+            if (currentUser) {
+                const loggedUser = { email: currentUser.email }
+                axios.post('http://localhost:5000/jwt', loggedUser, { withCredentials: true })
+                    .then(res => {
+                        console.log(res.data)
+                    })
+            }
+
         })
         return () => unSubcribe()
     }, [])
