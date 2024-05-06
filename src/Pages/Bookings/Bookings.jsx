@@ -1,6 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../Firebase/AuthProvider";
 import { update } from "firebase/database";
+import UseAxiosSecure from "../../BaseURL/UseAxiosSecure";
+import axios from "axios";
 
 
 const Bookings = () => {
@@ -8,17 +10,23 @@ const Bookings = () => {
     const { user } = useContext(AuthContext)
     console.log(user.email)
     const [bookings, setBookings] = useState([])
+    const axiosSecure = UseAxiosSecure()
 
-    const url = `http://localhost:5000/bookings?email=${user?.email}`
+    // const url = `http://localhost:5000/bookings?email=${user?.email}`
+    const url = `/bookings?email=${user?.email}`
 
 
     useEffect(() => {
-        fetch(url, { credentials: 'include' })
-            .then(res => res.json())
-            .then(data => {
-                setBookings(data)
-            })
-    }, [url])
+        // fetch(url, { credentials: 'include' })
+        //     .then(res => res.json())
+        //     .then(data => {
+        //         setBookings(data)
+        //     })
+        axiosSecure.get(url)
+            .then(res => setBookings(res.data))
+    }, [url, axiosSecure])
+
+
 
     const handleDelete = id => {
         const procced = confirm('Are You Sure you want to Delete?')
